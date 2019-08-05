@@ -4,7 +4,8 @@
   "description": "A pager component for the DataTheorem code exercise",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/babel src/Pager.js --out-file react-pager/index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/mattquesada/datatheorem-pager/issues"
   },
-  "homepage": "https://github.com/mattquesada/datatheorem-pager#readme"
+  "homepage": "https://github.com/mattquesada/datatheorem-pager#readme",
+  "peerDependencies": {
+    "react": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0"
+  }
 }
