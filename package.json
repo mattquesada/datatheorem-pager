@@ -1,0 +1,19 @@
+{
+  "name": "datatheorem-pager",
+  "version": "1.0.0",
+  "description": "A pager component for the DataTheorem code exercise",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattquesada/datatheorem-pager.git"
+  },
+  "author": "Matthew Quesada",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mattquesada/datatheorem-pager/issues"
+  },
+  "homepage": "https://github.com/mattquesada/datatheorem-pager#readme"
+}
