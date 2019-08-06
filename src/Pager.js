@@ -1,7 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class Pager extends React.Component {
+class PagerOverlay extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      survey: {
+        name: '',
+        email: '',
+        message: ''
+      }
+    };
+  }
+
+  handleChange(event) {
+    const surveyField = event.target.name;
+    this.setState({
+      survey: { ...this.state.survey, [surveyField]: event.target.value }
+    });
+  }
+
+  // do input validation here
+  handleSubmit() {
+    this.props.handleClose(this.state.survey);
+  }
+
+  render() {
+    const showHideClassName = this.props.show ? 'modal display-block' : 'modal display-none'
+    return (
+      <div className={showHideClassName}>
+        <div className='modal-main'>
+          <form onSubmit={e => this.handleSubmit()}>
+            <label>
+              Name:
+              <input type='text' name='name' value={this.state.survey.name} onChange={e => this.handleChange(e)} />
+            </label>
+            <label>
+              Email:
+              <input type='text' name='email' value={this.state.survey.email} onChange={e => this.handleChange(e)} />
+            </label>
+            <label>
+              Message:
+              <input type='text' name='message' value={this.state.survey.message} onChange={e => this.handleChange(e)} />
+            </label>
+            <input type='button' value='Submit' />
+          </form>
+        </div>
+      </div>
+    )
+  }
+}
+
+export default class Pager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -71,7 +121,7 @@ class Pager extends React.Component {
   changePage(newIndex) {
     this.setState({
       currentPageIndex: newIndex,
-      currentPageLabel: this.state.pageLabels(newIndex),
+      currentPageLabel: this.state.pageLabels[newIndex],
       page: this.props.pages[newIndex]
     });
   }
@@ -100,5 +150,3 @@ Pager.defaultProps = {
   supportRequestUrl: null,
   pageInfoUrl: null
 }
-
-export default Pager;
