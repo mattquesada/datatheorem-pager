@@ -51,24 +51,25 @@ class PagerOverlay extends React.Component {
   }
 }
 
-export default class Pager extends React.Component {
+class Pager extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       currentPageIndex: 0,
+      showOverlay: false,
       page: this.props.pages[0],
       goNext: () => this.goNext(),
       goPrevious: () => this.goPrevious(),
       goToLabel: (label) => this.goToLabel(label),
       currentPageLabel: this.props.getLabel(0),
       pageLabels: [],
-      loading: true,
-      error: false,
+      openSupportDialog: () => this.openSupportDialog()
     }
+    this.closeSupportDialog = this.closeSupportDialog.bind(this);
   }
 
   componentDidMount() {
-    this.loadLabels(this.props.pages); 
+    this.loadLabels(this.props.pages);
   }
 
   /*
@@ -114,6 +115,15 @@ export default class Pager extends React.Component {
     this.changePage(newPageIndex);
   }
 
+  openSupportDialog() {
+    this.setState({ showOverlay: true });
+  }
+
+  closeSupportDialog(survey) {
+    // do something with the survey value
+    this.setState({ showOverlay: false });
+  }
+
   /*
     utility method to change the current page's data and label to the 
     page and label defined by @newIndex
@@ -129,6 +139,7 @@ export default class Pager extends React.Component {
   render() {
     return (
       <div>
+        <PagerOverlay show={this.state.showOverlay} handleClose={this.closeSupportDialog} />
         {this.props.children({
           ...this.props,
           ...this.state
