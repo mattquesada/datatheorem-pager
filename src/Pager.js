@@ -1,6 +1,3 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
 class PagerOverlay extends React.Component {
   constructor() {
     super();
@@ -20,17 +17,33 @@ class PagerOverlay extends React.Component {
     });
   }
 
-  // do input validation here
-  handleSubmit() {
-    this.props.handleClose(this.state.survey);
+  /*
+    When the form submit button is clicked, verify that the inputs are valid
+    before closing the overlay. If the input is valid, use the handler from props.
+  */
+  handleSubmit(event) {
+    event.preventDefault(); // prevent form from closing so we can validate the fields
+    if (this.checkSubmission(this.state.survey))
+      this.props.handleClose(this.state.survey);
+    else
+      alert('Error: please populate all fields.');
+  }
+
+  /*
+    Verify that all of the input fields are populated
+  */
+  checkSubmission(survey) {
+    for (const field in survey)
+      if (!survey[field]) return false;
+    return true;
   }
 
   render() {
-    const showHideClassName = this.props.show ? 'modal display-block' : 'modal display-none'
+    const showHideClassName = this.props.show ? 'modal display-block' : 'modal display-none';
     return (
       <div className={showHideClassName}>
-        <div className='modal-main'>
-          <form onSubmit={e => this.handleSubmit()}>
+        <div className='modal-content'>
+          <form onSubmit={e => this.handleSubmit(e)}>
             <label>
               Name:
               <input type='text' name='name' value={this.state.survey.name} onChange={e => this.handleChange(e)} />
@@ -43,7 +56,7 @@ class PagerOverlay extends React.Component {
               Message:
               <input type='text' name='message' value={this.state.survey.message} onChange={e => this.handleChange(e)} />
             </label>
-            <input type='button' value='Submit' />
+            <input type='submit' value='Submit' />
           </form>
         </div>
       </div>
@@ -63,13 +76,21 @@ class Pager extends React.Component {
       goToLabel: (label) => this.goToLabel(label),
       currentPageLabel: this.props.getLabel(0),
       pageLabels: [],
-      openSupportDialog: () => this.openSupportDialog()
+      openSupportDialog: () => this.openSupportDialog(),
+      pageInfoIsLoading: true,
+      pageInfoError: '',
+      pageInfo: {}
     }
     this.closeSupportDialog = this.closeSupportDialog.bind(this);
   }
 
+  /*
+    When the Pager mounts, immediately load all the labels into 
+    an array for easy access, and load the page info for the first page
+  */
   componentDidMount() {
     this.loadLabels(this.props.pages);
+    this.loadPageInfo(this.state.currentPageLabel);
   }
 
   /*
@@ -115,18 +136,116 @@ class Pager extends React.Component {
     this.changePage(newPageIndex);
   }
 
+  /*
+    Toggle the showOverlay state so that the PagerOverlay component renders
+  */
   openSupportDialog() {
     this.setState({ showOverlay: true });
   }
 
+  /*
+    Receives the form data stored in @survey from the PagerOverlay 
+    child component and attemps to make a POST request
+  */
   closeSupportDialog(survey) {
-    // do something with the survey value
+    this.sendSurveyData(survey);
     this.setState({ showOverlay: false });
   }
 
   /*
+    send the survey data from the overlay to the 
+    supportRequestUrl, if it exists
+  */
+  async sendSurveyData(survey) {
+    if (!this.props.supportRequestUrl)
+      return;
+
+    const fetchOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(survey)
+    };
+
+    try {
+      const response = await fetch(this.props.supportRequestUrl, fetchOptions);
+      this.handleSupportResponse(response);
+    } catch (err) {
+      alert(err);
+    }
+  }
+
+  /*
+    utility method to alert the user if the survey was submitted
+    successfully to the provided supportRequestUrl
+  */
+  async handleSupportResponse(response) {
+    switch (response.status) {
+      case 200:
+      case 201:
+      case 202:
+      case 204:
+        alert('Support request received successfully');
+        break;
+      case 400:
+        const content = await response.json();
+        alert(content.message);
+        break;
+      default:
+        alert('Error in support request');
+        break;
+    }
+  }
+
+  /*
+    Load the page information using the Url provided by
+    props.pageInfoUrl(), if the prop is provided. This function is
+    called when the component mounts, as well as every time the user 
+    transitions to a different page
+  */
+  async loadPageInfo(label) {
+    if (!this.props.pageInfoUrl)
+      return;
+
+    const fetchUrl = this.props.pageInfoUrl(label);
+    try {
+      const response = await fetch(fetchUrl);
+      this.handlePageInfoResponse(response);
+    } catch (err) {
+      this.setState({
+        pageInfoError: 'cannot fetch page info',
+        pageInfoIsLoading: false,
+        pageInfo: null
+      })
+    }
+  }
+
+  /*
+    Check the response status of a page info request 
+    and alert the user of the request status. Also update
+    the state accordingly.
+  */
+  async handlePageInfoResponse(response) {
+    if (response.status >= 200 && response.status <= 299) {
+      this.setState({
+        pageInfoIsLoading: false,
+        pageInfoError: '',
+        pageInfo: await response.json()
+      });
+    }
+    else {
+      this.setState({
+        pageInfoError: 'cannot fetch page info',
+        pageInfoIsLoading: false,
+        pageInfo: null
+      })
+    }
+  }
+
+  /*
     utility method to change the current page's data and label to the 
-    page and label defined by @newIndex
+    page and label defined by @newIndex.
+    Also attemps to query the url provided by props.pageInfoUrl to load the 
+    page info, if it exists
   */
   changePage(newIndex) {
     this.setState({
@@ -134,17 +253,18 @@ class Pager extends React.Component {
       currentPageLabel: this.state.pageLabels[newIndex],
       page: this.props.pages[newIndex]
     });
+    this.loadPageInfo(this.state.pageLabels[newIndex]);
   }
 
   render() {
     return (
-      <div>
+      <>
         <PagerOverlay show={this.state.showOverlay} handleClose={this.closeSupportDialog} />
         {this.props.children({
           ...this.props,
           ...this.state
         })}
-      </div>
+      </>
     )
   }
 }
@@ -152,12 +272,31 @@ class Pager extends React.Component {
 Pager.propTypes = {
   pages: PropTypes.element.isRequired,
   getLabel: PropTypes.func.isRequired,
-  children: PropTypes.node.isRequired,
   supportRequestUrl: PropTypes.string,
-  pageInfoUrl: PropTypes.string
-}
+  pageInfoUrl: PropTypes.string,
+  children: PropTypes.shape({
+    page: PropTypes.element.isRequired,
+    goPrevious: PropTypes.func.isRequired,
+    goNext: PropTypes.func.isRequired,
+    goToLabel: PropTypes.func.isRequired,
+    currentPageLabel: PropTypes.string.isRequired,
+    pageLabels: PropTypes.array.isRequired,
+    openSupportDialog: PropTypes.func,
+    pageInfoIsLoading: PropTypes.bool,
+    pageInfoError: PropTypes.bool,
+    pageInfo: PropTypes.object
+  })
+};
 
 Pager.defaultProps = {
   supportRequestUrl: null,
-  pageInfoUrl: null
+  pageInfoUrl: null,
+  children: {
+    openSupportDialog: null,
+    pageInfoIsLoading: false,
+    pageInfoError: false,
+    pageInfo: null
+  }
 }
+
+export default Pager;
