@@ -1,13 +1,11 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 import EmployeePages from './testComponents/EmployeePages';
-import { employees, fakeResponses } from './testComponents/testConfig';
+import { employees, fakeResponses, sampleSurveys } from './testComponents/testConfig';
 
 describe('Pager', () => {
   it('renders without crashing', () => {
-    const wrapper = shallow(<EmployeePages employees={employees} />);
-    const pager = wrapper.find('Pager');
-    console.log(pager.debug());
+    shallow(<EmployeePages employees={employees} />);
   });
 
 
@@ -56,6 +54,35 @@ describe('Pager', () => {
     expect(pager.state('currentPageIndex')).toBe(0);
     expect(pager.state('currentPageLabel')).toBe(pageLabels[0]);
   });
+  
+
+  it('handles Support response types', async () => {
+    const wrapper = mount(<EmployeePages employees={employees} />);
+    const pager = wrapper.find('Pager');
+    const pagerInstance = pager.instance();
+
+    // test statuses 200 - 204
+    let resultMessage = await pagerInstance.handleSupportResponse(fakeResponses['200']);
+    expect(resultMessage).toBe('Support request received successfully');
+   
+    resultMessage = await pagerInstance.handleSupportResponse(fakeResponses['201']);
+    expect(resultMessage).toBe('Support request received successfully');
+    
+    resultMessage = await pagerInstance.handleSupportResponse(fakeResponses['202']);
+    expect(resultMessage).toBe('Support request received successfully');
+    
+    resultMessage = await pagerInstance.handleSupportResponse(fakeResponses['204']);
+    expect(resultMessage).toBe('Support request received successfully');
+    
+    // test status 400
+    resultMessage = await pagerInstance.handleSupportResponse(fakeResponses['400']);
+    expect(resultMessage).toBe('Hello, 400');
+
+    // test status 500
+    resultMessage = await pagerInstance.handleSupportResponse(fakeResponses['500']);
+    expect(resultMessage).toBe('Error in support request');
+  });
+
 
   it('handles Page Info response types', async () => {
     const wrapper = mount(<EmployeePages employees={employees} />);
@@ -84,6 +111,36 @@ describe('Pager', () => {
     await pagerInstance.handlePageInfoResponse(fakeResponses['300']);
     expect(pager.state('pageInfoError')).toBe('cannot fetch page info');
     expect(pager.state('pageInfo')).toBe(null);
+  });
 
+  // add tests for null props
+
+  // add tests for updated props
+
+});
+
+describe('PagerOverlay', () => {
+  it('should render when parent showOverlay is toggled', () => {
+    const wrapper = mount(<EmployeePages employees={employees} />);
+    const pager = wrapper.find('Pager');
+
+    pager.setState({ showOverlay: true });
+    expect(wrapper.find('PagerOverlay').props().show).toBe(true);
+  });
+
+
+  it('should validate form data', async () => {
+    const wrapper = mount(<EmployeePages employees={employees} />);
+    const pagerOverlay = wrapper.find('PagerOverlay');
+    const pagerOverlayInstance = pagerOverlay.instance();
+    let validSurvey = false;
+
+    // inject a valid survey into state and submit the form
+    validSurvey = pagerOverlayInstance.checkSubmission(sampleSurveys.validSurvey);
+    expect(validSurvey).toBe(true);
+
+    // inject a survey with an empty field
+    validSurvey = pagerOverlayInstance.checkSubmission(sampleSurveys.emptyField);
+    expect(validSurvey).toBe(false);
   });
 });

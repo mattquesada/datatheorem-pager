@@ -25,6 +25,23 @@ export const fakeResponses = {
   '199': { status: 199, json: () => 'Hello, 199' },
   '200': { status: 200, json: () => 'Hello, 200' },
   '201': { status: 201, json: () => 'Hello, 201' },
+  '202': { status: 201, json: () => 'Hello, 202' },
+  '204': { status: 204, json: () => 'Hello, 204' },
   '299': { status: 299, json: () => 'Hello, 299' },
-  '300': { status: 300, json: () => 'Hello, 300' }
-}
+  '300': { status: 300, json: () => 'Hello, 300' },
+  '400': { status: 400, json: () => 'Hello, 400' },
+  '500': { status: 500, json: () => 'Hello, 500' }
+};
+
+export const sampleSurveys = {
+  validSurvey: {
+    name: 'Malory Jenkins',
+    email: 'mjenkins@gmail.com',
+    message: 'Hello, World!'
+  },
+  emptyField: {
+    name: 'Malory Jenkins',
+    email: 'mjenkins@gmail.com',
+    message: ''
+  }
+};

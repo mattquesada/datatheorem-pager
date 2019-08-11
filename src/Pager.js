@@ -53,7 +53,7 @@ class PagerOverlay extends React.Component {
             </label>
             <label>
               Email:
-              <input type='text' name='email' value={this.state.survey.email} onChange={e => this.handleChange(e)} />
+              <input type='email' name='email' value={this.state.survey.email} onChange={e => this.handleChange(e)} />
             </label>
             <label>
               Message:
@@ -65,6 +65,14 @@ class PagerOverlay extends React.Component {
       </div>
     )
   }
+};
+
+PagerOverlay.propTypes = {
+
+}
+
+PagerOverlay.defaultProps = {
+  
 }
 
 class Pager extends React.Component {
@@ -171,7 +179,7 @@ class Pager extends React.Component {
 
     try {
       const response = await fetch(this.props.supportRequestUrl, fetchOptions);
-      this.handleSupportResponse(response);
+      alert(this.handleSupportResponse(response));
     } catch (err) {
       alert(err);
     }
@@ -187,15 +195,11 @@ class Pager extends React.Component {
       case 201:
       case 202:
       case 204:
-        alert('Support request received successfully');
-        break;
+        return 'Support request received successfully';
       case 400:
-        const content = await response.json();
-        alert(content.message);
-        break;
+        return await response.json();
       default:
-        alert('Error in support request');
-        break;
+        return 'Error in support request'
     }
   }
 
