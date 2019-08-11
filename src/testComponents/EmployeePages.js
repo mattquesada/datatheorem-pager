@@ -13,9 +13,9 @@ function EmployeePages({ employees }) {
       <Pager
         pages={employees.map(employee => (
           <ul>
-            <li>Name: {employee.last_name}, {employee.first_name}</li>
-            <li>Department: {employee.department}</li>
-            <li>Salary: ${employee.salary}</li>
+            <li id='name'>Name: {employee.last_name}, {employee.first_name}</li>
+            <li id='department'>Department: {employee.department}</li>
+            <li id='salary'>Salary: ${employee.salary}</li>
           </ul>
         ))}
         getLabel={

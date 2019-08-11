@@ -215,8 +215,8 @@ class Pager extends React.Component {
       this.handlePageInfoResponse(response);
     } catch (err) {
       this.setState({
-        pageInfoError: 'cannot fetch page info',
         pageInfoIsLoading: false,
+        pageInfoError: 'cannot fetch page info',
         pageInfo: null
       })
     }
@@ -231,14 +231,14 @@ class Pager extends React.Component {
     if (response.status >= 200 && response.status <= 299) {
       this.setState({
         pageInfoIsLoading: false,
-        pageInfoError: '',
+        pageInfoError: null,
         pageInfo: await response.json()
       });
     }
     else {
       this.setState({
-        pageInfoError: 'cannot fetch page info',
         pageInfoIsLoading: false,
+        pageInfoError: 'cannot fetch page info',
         pageInfo: null
       })
     }
