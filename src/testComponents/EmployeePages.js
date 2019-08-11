@@ -1,0 +1,79 @@
+/*
+  The original example component provided by DataTheorem,
+  slightly modified for enzyme test access
+*/
+
+import React from 'react';
+import Pager from '../Pager';
+
+function EmployeePages({ employees }) {
+  return (
+    <div>
+      <h1>Employees</h1>
+      <Pager
+        pages={employees.map(employee => (
+          <ul>
+            <li>Name: {employee.last_name}, {employee.first_name}</li>
+            <li>Department: {employee.department}</li>
+            <li>Salary: ${employee.salary}</li>
+          </ul>
+        ))}
+        getLabel={
+          i => `${employees[i].last_name}, ${employees[i].first_name}`
+        }
+        //pageInfoUrl={(label) => `https://www.example.com/employees/info?label=${label}`}
+        pageInfoUrl={(label) => `http://localhost:4000/employees/info?label=${label}`}
+        //supportRequestUrl="https://www.example.com/support"
+        supportRequestUrl="http://localhost:4000/support"
+      >
+        {({
+          page,
+          goPrevious,
+          goNext,
+          goToLabel,
+          currentPageLabel,
+          pageLabels,
+          openSupportDialog,
+          pageInfoIsLoading,
+          pageInfoError,
+          pageInfo,
+        }) => (
+          <>
+            <div>
+              <select onChange={e => goToLabel(e.target.value)}>
+                {pageLabels.map((label, index) => (
+                  <option
+                    value={label}
+                    selected={label === currentPageLabel}
+                    key={index}
+                  >
+                    {label}
+                  </option>
+                ))}
+              </select>
+              <button id='button-previous' onClick={goPrevious}>Previous</button>
+              <button id='button-next' onClick={goNext}>Next</button>
+              <button id='button-help' onClick={openSupportDialog}>Help</button>
+            </div>
+            <div>
+              {page}
+            </div>
+            {pageInfoIsLoading && (
+              <div>Loading more info...</div>
+            )}
+            {pageInfoError && (
+              <div>Error fetching info: {pageInfoError}</div>
+            )}
+            {pageInfo && (
+              <div>
+                # of Likes: {pageInfo.likes}
+              </div>
+            )}
+          </>
+        )}
+      </Pager>
+    </div>
+  );
+}
+
+export default EmployeePages;

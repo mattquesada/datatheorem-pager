@@ -4,7 +4,7 @@
   "description": "A pager component for the DataTheorem code exercise",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --watch",
     "build": "./node_modules/.bin/babel src/Pager.js --out-file react-pager/index.js"
   },
   "repository": {
@@ -18,12 +18,28 @@
   },
   "homepage": "https://github.com/mattquesada/datatheorem-pager#readme",
   "peerDependencies": {
-    "react": "^16.8.6"
+    "react": "^16.8.6",
+    "react-dom": "^16.9.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
-    "@babel/preset-react": "^7.0.0"
+    "@babel/preset-react": "^7.0.0",
+    "babel-polyfill": "^6.26.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
+    "jest": "^24.8.0",
+    "react-test-renderer": "^16.8.6",
+    "regenerator-runtime": "^0.13.3"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>src/setupTests.js"
+    ]
+  },
+  "dependencies": {
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
   }
 }

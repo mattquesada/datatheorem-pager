@@ -1,3 +1,6 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
 class PagerOverlay extends React.Component {
   constructor() {
     super();
@@ -270,22 +273,11 @@ class Pager extends React.Component {
 }
 
 Pager.propTypes = {
-  pages: PropTypes.element.isRequired,
+  pages: PropTypes.array.isRequired,
   getLabel: PropTypes.func.isRequired,
   supportRequestUrl: PropTypes.string,
-  pageInfoUrl: PropTypes.string,
-  children: PropTypes.shape({
-    page: PropTypes.element.isRequired,
-    goPrevious: PropTypes.func.isRequired,
-    goNext: PropTypes.func.isRequired,
-    goToLabel: PropTypes.func.isRequired,
-    currentPageLabel: PropTypes.string.isRequired,
-    pageLabels: PropTypes.array.isRequired,
-    openSupportDialog: PropTypes.func,
-    pageInfoIsLoading: PropTypes.bool,
-    pageInfoError: PropTypes.bool,
-    pageInfo: PropTypes.object
-  })
+  pageInfoUrl: PropTypes.func,
+  children: PropTypes.func
 };
 
 Pager.defaultProps = {
