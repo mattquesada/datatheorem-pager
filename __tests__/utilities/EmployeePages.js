@@ -47,7 +47,7 @@ export function EmployeePages({ employees }) {
                 {pageLabels.map((label, index) => (
                   <option
                     value={label}
-                    selected={label === currentPageLabel}
+                    defaultValue={currentPageLabel}
                     key={index}
                   >
                     {label}
@@ -120,7 +120,7 @@ export function EmployeePagesWithNullProps({ employees }) {
                   {pageLabels.map((label, index) => (
                     <option
                       value={label}
-                      selected={label === currentPageLabel}
+                      defaultValue={currentPageLabel}
                       key={index}
                     >
                       {label}
