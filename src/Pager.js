@@ -95,16 +95,20 @@ class Pager extends React.Component {
   /*
     When the Pager mounts, immediately load all the labels into 
     an array for easy access, and load the page info for the first page
+    If supportRequestUrl is null, nullify openSupportDialog
   */
   componentDidMount() {
     this.loadLabels(this.props.pages);
     this.loadPageInfo(this.state.currentPageLabel);
+    this.checkSupportRequestUrl(this.props.supportRequestUrl);
   }
 
   /*
     If the pages get updated, reload the labels and return
-    to the first page
-    If the getLabel() function is updated, reload the labels
+    to the first page.
+    If the getLabel() function is updated, reload the labels.
+    If supportRequestUrl becomes non-null, change openSupportDialog
+    to be non-null in render.
   */
   componentDidUpdate(prevProps) {
     if (prevProps.pages !== this.props.pages) {
@@ -112,9 +116,10 @@ class Pager extends React.Component {
       this.loadPageInfo(this.props.getLabel(0));
       this.changePage(0);
     }
-    if (prevProps.getLabel !== this.props.getLabel) { 
+    if (prevProps.getLabel !== this.props.getLabel)
       this.loadLabels(this.props.pages);
-    }
+    if (prevProps.supportRequestUrl !== this.props.supportRequestUrl) 
+      this.setState({ openSupportDialog: () => this.openSupportDialog()});
   }
 
   /*
@@ -223,8 +228,14 @@ class Pager extends React.Component {
     transitions to a different page
   */
   async loadPageInfo(label) {
-    if (!this.props.pageInfoUrl)
+    if (!this.props.pageInfoUrl) {
+      this.setState({
+        pageInfoIsLoading: false,
+        pageInfoError: 'no pageInfoUrl prop provided',
+        pageInfo: null
+      });
       return;
+    }
 
     const fetchUrl = this.props.pageInfoUrl(label);
     try {
@@ -237,6 +248,15 @@ class Pager extends React.Component {
         pageInfo: null
       })
     }
+  }
+
+  /*
+    if the supportRequestUrl prop is not provided,
+    nullify the openSupportDialog child prop as 
+    described in the documentation
+  */
+  checkSupportRequestUrl(url) {
+    if (!url) this.setState({ openSupportDialog: null });
   }
 
   /*
@@ -303,7 +323,7 @@ Pager.defaultProps = {
   children: {
     openSupportDialog: null,
     pageInfoIsLoading: false,
-    pageInfoError: false,
+    pageInfoError: null,
     pageInfo: null
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import EmployeePages from './testComponents/EmployeePages';
+import { EmployeePages, EmployeePagesWithNullProps } from './testComponents/EmployeePages';
 import { employees, fakeResponses, sampleSurveys } from './testComponents/testConfig';
 
 describe('Pager', () => {
@@ -113,9 +113,49 @@ describe('Pager', () => {
     expect(pager.state('pageInfo')).toBe(null);
   });
 
-  // add tests for null props
 
-  // add tests for updated props
+  it('should handle null props correctly', () => {
+    const wrapper = mount(<EmployeePagesWithNullProps employees={employees} />);
+    const pager = wrapper.find('Pager');
+    const pagerInstance = pager.instance();
+
+    // test null pageInfoUrl, pageInfoError flag will be raised
+    pagerInstance.loadPageInfo();
+    expect(pager.state('pageInfoError')).toBe('no pageInfoUrl prop provided');
+
+    // test null supportRequestUrl, openSupportDialog will be null
+    expect(pager.state('openSupportDialog')).toBe(null);
+  });
+  
+
+  it('should handle updates to props correctly', () => {
+    const wrapper = mount(<EmployeePages employees={employees} />);
+    const pager = wrapper.find('Pager');
+    const pagerInstance = pager.instance();
+
+    // remove an employee to remove a page
+    // the pager component should re-render the first page
+    let tempEmployees = employees;
+    let poppedEmployee = tempEmployees.pop();
+    wrapper.setProps({ employees: tempEmployees });
+    expect(pager.state('pageLabels').length).toBe(2);
+    expect(pager.state('currentPageIndex')).toBe(0);
+    expect(pager.state('currentPageLabel')).toBe(pager.state('pageLabels')[0]);
+
+    // navigate around the pages a little bit
+    pagerInstance.goPrevious();
+    pagerInstance.goPrevious();
+    pagerInstance.goToLabel(pager.state('pageLabels')[1]);
+
+    // add the popped employee back in (twice) to add two more pages
+    // the pager component should re-render the first page
+    tempEmployees.push(poppedEmployee);
+    tempEmployees.push(poppedEmployee);
+    wrapper.setProps({ employees: tempEmployees });
+    expect(pager.state('pageLabels').length).toBe(4);
+    expect(pager.state('currentPageIndex')).toBe(0);
+    expect(pager.state('currentPageLabel')).toBe(pager.state('pageLabels')[0]);
+  });
 
 });
 
