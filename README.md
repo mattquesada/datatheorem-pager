@@ -165,6 +165,6 @@ yarn test
 or
 
 ```
-npm
+npm install
 npm test
 ```
