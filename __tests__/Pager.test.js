@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { EmployeePages, EmployeePagesWithNullProps } from './testComponents/EmployeePages';
-import { employees, fakeResponses, sampleSurveys } from './testComponents/testConfig';
+import { EmployeePages, EmployeePagesWithNullProps } from './utilities/EmployeePages';
+import { employees, fakeResponses, sampleSurveys } from './utilities/testConfig';
 
 describe('Pager', () => {
   it('renders without crashing', () => {

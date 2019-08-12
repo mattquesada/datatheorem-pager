@@ -4,7 +4,7 @@
   "description": "A pager component for the DataTheorem code exercise",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest",
     "build": "./node_modules/.bin/babel src/Pager.js --out-file react-pager/index.js"
   },
   "repository": {
@@ -35,8 +35,15 @@
   },
   "jest": {
     "setupFilesAfterEnv": [
-      "<rootDir>src/setupTests.js"
-    ]
+      "<rootDir>__tests__/setup/setupTests.js"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/__tests__/setup/",
+      "<rootDir>/__tests__/utilities/"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js"
+    }
   },
   "dependencies": {
     "react": "^16.9.0",

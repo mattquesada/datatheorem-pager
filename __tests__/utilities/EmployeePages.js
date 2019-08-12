@@ -4,7 +4,7 @@
 */
 
 import React from 'react';
-import Pager from '../Pager';
+import Pager from '../../src/Pager';
 
 export function EmployeePages({ employees }) {
   return (

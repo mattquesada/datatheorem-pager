@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import './Pager.css';
 
 class PagerOverlay extends React.Component {
   constructor() {
@@ -46,24 +47,24 @@ class PagerOverlay extends React.Component {
     return (
       <div className={showHideClassName}>
         <div className='modal-content'>
-          <form onSubmit={e => this.handleSubmit(e)}>
-            <label>
-              Name:
-              <input type='text' name='name' value={this.state.survey.name} onChange={e => this.handleChange(e)} />
-            </label>
-            <label>
-              Email:
-              <input type='email' name='email' value={this.state.survey.email} onChange={e => this.handleChange(e)} />
-            </label>
-            <label>
-              Message:
-              <input type='text' name='message' value={this.state.survey.message} onChange={e => this.handleChange(e)} />
-            </label>
-            <input type='submit' value='Submit' />
-          </form>
+          <h3>Please fill out the form:</h3>
+          <div className='modal-form'>
+            <form onSubmit={e => this.handleSubmit(e)}>
+              <label>
+                Name: <input type='text' name='name' value={this.state.survey.name} onChange={e => this.handleChange(e)} />
+              </label>
+              <label>
+                Email: <input type='email' name='email' value={this.state.survey.email} onChange={e => this.handleChange(e)} />
+              </label>
+              <label>
+                Message: <input type='text' name='message' value={this.state.survey.message} onChange={e => this.handleChange(e)} />
+              </label>
+              <input type='submit' value='Submit' />
+            </form>
+          </div>
         </div>
       </div>
-    )
+    );
   }
 };
 
