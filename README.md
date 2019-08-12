@@ -4,11 +4,11 @@ React Pager
 Installation
 ---
 
-`yarn add https://github.com/mattquesada/datatheorem-pager`
+`yarn add mattquesada/datatheorem-pager#master`
 
 or
 
-`npm install --save https://github.com/mattquesada/datatheorem-pager`
+`npm install --save mattquesada/datatheorem-pager#master`
 
 Usage Example
 ---
@@ -18,7 +18,7 @@ app:
 
 ```jsx
 import React from 'react';
-import Pager from '@datatheorem/react-pager';
+import Pager from 'datatheorem-pager/react-pager';
 
 export default function EmployeePages({ employees }) {
   return (
@@ -165,6 +165,6 @@ yarn test
 or
 
 ```
-npm
+npm install
 npm test
 ```
