@@ -254,7 +254,7 @@ class Pager extends React.Component {
   /*
     if the supportRequestUrl prop is not provided,
     nullify the openSupportDialog child prop as 
-    described in the documentation
+    described in the documentation.
   */
   checkSupportRequestUrl(url) {
     if (!url) this.setState({ openSupportDialog: null });
