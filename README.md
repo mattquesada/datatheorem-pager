@@ -18,7 +18,7 @@ app:
 
 ```jsx
 import React from 'react';
-import Pager from '@datatheorem/react-pager';
+import Pager from 'datatheorem-pager/react-pager';
 
 export default function EmployeePages({ employees }) {
   return (
