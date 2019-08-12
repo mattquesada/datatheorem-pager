@@ -476,7 +476,7 @@ function (_React$Component2) {
     /*
       if the supportRequestUrl prop is not provided,
       nullify the openSupportDialog child prop as 
-      described in the documentation
+      described in the documentation.
     */
 
   }, {

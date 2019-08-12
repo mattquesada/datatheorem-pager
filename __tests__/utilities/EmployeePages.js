@@ -16,6 +16,11 @@ export function EmployeePages({ employees }) {
             <li id='name'>Name: {employee.last_name}, {employee.first_name}</li>
             <li id='department'>Department: {employee.department}</li>
             <li id='salary'>Salary: ${employee.salary}</li>
+            <div>
+              Assignments: {employee.assignments.map((assignment, index) => (
+                <div key={index}>{assignment}</div>
+              ))}
+            </div>
           </ul>
         ))}
         getLabel={
@@ -84,6 +89,11 @@ export function EmployeePagesWithNullProps({ employees }) {
             <li id='name'>Name: {employee.last_name}, {employee.first_name}</li>
             <li id='department'>Department: {employee.department}</li>
             <li id='salary'>Salary: ${employee.salary}</li>
+            <div>
+              Assignments: {employee.assignments.map((assignment, index) => (
+                <div key={index}>{assignment}</div>
+              ))}
+            </div>
           </ul>
         ))}
         getLabel={

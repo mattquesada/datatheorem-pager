@@ -3,19 +3,22 @@ export const employees = [
     first_name: 'Joe',
     last_name: 'Bob',
     department: 'Nursing',
-    salary: 100000
+    salary: 100000,
+    assignments: ['assist doctor', 'administer shots']
   },
   {
     first_name: 'Sarah',
     last_name: 'Stevens',
     department: 'Engineering',
-    salary: 150000
+    salary: 150000,
+    assignments: ['build things', 'create reports', 'take nap']
   },
   {
     first_name: 'Johnny',
     last_name: 'Smith',
     department: 'Library',
-    salary: 80000
+    salary: 80000,
+    assignments: ['look grumpy', 'shush people']
   }
 ];
 
