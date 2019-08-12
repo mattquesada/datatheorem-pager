@@ -68,11 +68,8 @@ class PagerOverlay extends React.Component {
 };
 
 PagerOverlay.propTypes = {
-
-}
-
-PagerOverlay.defaultProps = {
-  
+  show: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired
 }
 
 class Pager extends React.Component {
@@ -102,6 +99,22 @@ class Pager extends React.Component {
   componentDidMount() {
     this.loadLabels(this.props.pages);
     this.loadPageInfo(this.state.currentPageLabel);
+  }
+
+  /*
+    If the pages get updated, reload the labels and return
+    to the first page
+    If the getLabel() function is updated, reload the labels
+  */
+  componentDidUpdate(prevProps) {
+    if (prevProps.pages !== this.props.pages) {
+      this.loadLabels(this.props.pages);
+      this.loadPageInfo(this.props.getLabel(0));
+      this.changePage(0);
+    }
+    if (prevProps.getLabel !== this.props.getLabel) { 
+      this.loadLabels(this.props.pages);
+    }
   }
 
   /*

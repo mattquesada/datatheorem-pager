@@ -21,10 +21,8 @@ function EmployeePages({ employees }) {
         getLabel={
           i => `${employees[i].last_name}, ${employees[i].first_name}`
         }
-        //pageInfoUrl={(label) => `https://www.example.com/employees/info?label=${label}`}
-        pageInfoUrl={(label) => `http://localhost:4000/employees/info?label=${label}`}
-        //supportRequestUrl="https://www.example.com/support"
-        supportRequestUrl="http://localhost:4000/support"
+        pageInfoUrl={(label) => `https://www.example.com/employees/info?label=${label}`}
+        supportRequestUrl="https://www.example.com/support"
       >
         {({
           page,
@@ -51,9 +49,9 @@ function EmployeePages({ employees }) {
                   </option>
                 ))}
               </select>
-              <button id='button-previous' onClick={goPrevious}>Previous</button>
-              <button id='button-next' onClick={goNext}>Next</button>
-              <button id='button-help' onClick={openSupportDialog}>Help</button>
+              <button onClick={goPrevious}>Previous</button>
+              <button onClick={goNext}>Next</button>
+              <button onClick={openSupportDialog}>Help</button>
             </div>
             <div>
               {page}
